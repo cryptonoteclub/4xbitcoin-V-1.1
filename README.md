@@ -1,4 +1,4 @@
-# 4xBIT
+# 4xBIT-V1
 
 Copyright (c) 2018-2019, The Mybtcfx Developers.   
 Portions Copyright (c) 2012-2017, The CryptoNote Developers, The Bytecoin Developers.
@@ -12,9 +12,9 @@ Portions Copyright (c) 2012-2017, The CryptoNote Developers, The Bytecoin Develo
 
 ```sudo apt-get -y install gcc-4.8 g++-4.8  git cmake```
 
-```git clone https://github.com/mybtcfx/4xbitcoin```
+```git clone https://github.com/mybtcfx/4xbitcoin-V1.git```
 
-```cd 4xBIT```
+```cd 4xbitcoin-V1```
 
 ```mkdir build ; cd build```
 
