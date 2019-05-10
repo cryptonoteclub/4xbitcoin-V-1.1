@@ -66,8 +66,8 @@ const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2  = 20000;
 const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1  = 10000;
 const size_t   CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_CURRENT = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE;
 const size_t   CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE        = 600;
-const size_t   CRYPTONOTE_DISPLAY_DECIMAL_POINT              = 10;
-const uint64_t MINIMUM_FEE                                   = UINT64_C(10000);
+const size_t   CRYPTONOTE_DISPLAY_DECIMAL_POINT              = 8;
+const uint64_t MINIMUM_FEE                                   = UINT64_C(100000);
 const uint64_t DEFAULT_DUST_THRESHOLD                        = UINT64_C(10000);
 // Use 0 for default max transaction size limit
 const uint64_t MAX_TRANSACTION_SIZE_LIMIT                          = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE * 110 / 100 - CRYPTONOTE_COINBASE_BLOB_RESERVED_SIZE;
@@ -115,7 +115,7 @@ const char     CRYPTONOTE_BLOCKINDEXES_FILENAME[]            = "blockindexes.bin
 const char     CRYPTONOTE_POOLDATA_FILENAME[]                = "poolstate.bin";
 const char     P2P_NET_DATA_FILENAME[]                       = "p2pstate.bin";
 const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json";
-const char     GENESIS_COINBASE_TX_HEX[]                     = "010401ff00018080d8d4d99ae686030275d85db8d345620e6d30e16489852e58bf59340087d8438aa051a968cfdd5423210108c4045a99931b48c01a13440886f10740110bf8c5c8a775c95125602acadd76";
+const char     GENESIS_COINBASE_TX_HEX[]                     = "010401ff000180809dd085bedd0302fac8893c3151a4f93dec3ddbc1b936284274348d9ecd780fdbb4bd42652bed0221013126e2641c84f17fcb493925cce388995c4f1ceddc30b1e315b5aa3d27ebd85e";
 } // parameters
 
 const char     CRYPTONOTE_NAME[]                             = "4xbit";
@@ -157,7 +157,7 @@ const uint32_t  P2P_IDLE_CONNECTION_KILL_INTERVAL               = (5*60); //5 mi
 
 const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "";
 
-const char* const SEED_NODES[] = { "208.68.38.73:21697", "159.203.189.225:21697" };
+const char* const SEED_NODES[] = { "208.68.38.73:21697", "159.203.189.225:21697", "134.209.113.231:21697" };
 
 
 struct CheckpointData {
