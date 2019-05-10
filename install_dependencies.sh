@@ -101,8 +101,7 @@ function installUbuntu {
 }
 
 function doneMessage {
-  echo "Cryptonote generator configuration finished."
-  echo "type 'bash generator.sh [-h] [-f FILE] [-c <string>]' to generate Cryptonote coin."
+  echo "Dependencies Installation Completed."
 }
 
 if [[ $OSTYPE == darwin* ]] ; then
