@@ -8,13 +8,13 @@ Portions Copyright (c) 2012-2017, The CryptoNote Developers, The Bytecoin Develo
 
 # How to Compile
 
-```sudo apt-get -y install build-essential libssl-dev libboost-all-dev```
+```git clone https://github.com/mybtcfx/4xbitcoin-V-1.1.git 4xbitcoin```
 
-```sudo apt-get -y install gcc-4.8 g++-4.8  git cmake```
+```cd 4xbitcoin```
 
-```git clone https://github.com/mybtcfx/4xbitcoin-V1.git```
+```bash install_dependencies.sh```
 
-```cd 4xbitcoin-V1```
+```chmod -R 777 external/rocksdb/build_tools```
 
 ```mkdir build ; cd build```
 
