@@ -1,70 +1,6 @@
-// Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-//
-// This file is part of Bytecoin.
-//
-// Bytecoin is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Bytecoin is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
-// Cryptonight V7 (variant 1) code credits: Monero, Karbo
-
-#include <stdio.h>
-#if defined(WIN32)
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
-
-#define xor64(a, b) *((uint64_t*)a) ^= b
-
-#define VARIANT1_1(p) \
-  do if (variant > 0) \
-  { \
-    const uint8_t tmp = ((const uint8_t*)(p))[11]; \
-    static const uint32_t table = 0x75310; \
-    const uint8_t index = (((tmp >> 3) & 6) | (tmp & 1)) << 1; \
-    ((uint8_t*)(p))[11] = tmp ^ ((table >> index) & 0x30); \
-  } while(0);
-
-#define VARIANT1_2(p) \
-  do if (variant > 0) \
-  { \
-    xor64(p, tweak1_2); \
-  } while(0);
-
-#define VARIANT1_CHECK() \
-  do if (length < 43) \
-  { \
-    fprintf(stderr, "Cryptonight variants need at least 43 bytes of data. Exiting."); \
-    _exit(1); \
-  } while(0);
-
-#define NONCE_POINTER (((const uint8_t*)data)+35)
-
-#define VARIANT1_PORTABLE_INIT() \
-  uint8_t tweak1_2[8]; \
-  do if (variant > 0) \
-  { \
-    VARIANT1_CHECK(); \
-    memcpy(&tweak1_2, &state.hs.b[192], sizeof(tweak1_2)); \
-    xor64(tweak1_2, NONCE_POINTER); \
-  } while(0)
-
-#define VARIANT1_INIT64() \
-  if (variant > 0) \
-  { \
-    VARIANT1_CHECK(); \
-  } \
-  const uint64_t tweak1_2 = variant > 0 ? (ctx->state.hs.w[24] ^ (*((const uint64_t*)NONCE_POINTER))) : 0
-
+// Copyright (c) 2011-2017, The ManateeCoin Developers, The Cryptonote developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 static void
 #if defined(AESNI)
@@ -72,20 +8,16 @@ cn_slow_hash_aesni
 #else
 cn_slow_hash_noaesni
 #endif
-(void *restrict context, const void *restrict data, size_t length, void *restrict hash, int variant)
+(void *restrict context, const void *restrict data, size_t length, void *restrict hash)
 {
 #define ctx ((struct cn_ctx *) context)
   ALIGNED_DECL(uint8_t ExpandedKey[256], 16);
   size_t i;
   __m128i *longoutput, *expkey, *xmminput, b_x;
   ALIGNED_DECL(uint64_t a[2], 16);
-    hash_process(&ctx->state.hs, (const uint8_t*) data, length);
+  hash_process(&ctx->state.hs, (const uint8_t*) data, length);
+
   memcpy(ctx->text, ctx->state.init, INIT_SIZE_BYTE);
-
-VARIANT1_INIT64();
-
-
-
 #if defined(AESNI)
   memcpy(ExpandedKey, ctx->state.hs.b, AES_KEY_SIZE);
   ExpandAESKey256(ExpandedKey);
@@ -254,4 +186,3 @@ VARIANT1_INIT64();
   hash_permutation(&ctx->state.hs);
   extra_hashes[ctx->state.hs.b[0] & 3](&ctx->state, 200, hash);
 }
-

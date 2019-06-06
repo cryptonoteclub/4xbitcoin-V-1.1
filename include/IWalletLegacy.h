@@ -1,19 +1,6 @@
-// Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-//
-// This file is part of Bytecoin.
-//
-// Bytecoin is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Bytecoin is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
+// Copyright (c) 2011-2017, The ManateeCoin Developers, The Cryptonote developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #pragma once
 
@@ -23,6 +10,7 @@
 #include <string>
 #include <system_error>
 #include "CryptoNote.h"
+#include "CryptoNoteCore/CryptoNoteFormatUtils.h"
 
 namespace CryptoNote {
 
@@ -60,6 +48,35 @@ struct WalletLegacyTransaction {
   uint64_t         timestamp;
   std::string      extra;
   WalletLegacyTransactionState state;
+};
+
+struct tx_construction_data
+{
+	std::vector<CryptoNote::TransactionSourceEntry> sources;
+	CryptoNote::TransactionDestinationEntry change_dts;
+	std::vector<CryptoNote::TransactionDestinationEntry> splitted_dsts;
+	std::list<size_t> selected_transfers;
+	std::vector<uint8_t> extra;
+	uint64_t unlock_time;
+	bool use_rct;
+	std::vector<CryptoNote::TransactionDestinationEntry> dests;
+	uint32_t subaddr_account;
+	std::set<uint32_t> subaddr_indices;
+};
+
+struct pending_tx
+{
+	CryptoNote::Transaction tx;
+	uint64_t dust, fee;
+	bool dust_added_to_fee;
+	CryptoNote::TransactionDestinationEntry change_dts;
+	std::list<size_t> selected_transfers;
+	std::string key_images;
+	Crypto::SecretKey tx_key;
+	std::vector<Crypto::SecretKey> additional_tx_keys;
+	std::vector<CryptoNote::TransactionDestinationEntry> dests;
+
+	tx_construction_data construction_data;
 };
 
 class IWalletLegacyObserver {
@@ -111,7 +128,6 @@ public:
   virtual std::error_code cancelTransaction(size_t transferId) = 0;
 
   virtual void getAccountKeys(AccountKeys& keys) = 0;
-  virtual void syncAll(bool syncWalletFromZero = 0) = 0;
 };
 
 }

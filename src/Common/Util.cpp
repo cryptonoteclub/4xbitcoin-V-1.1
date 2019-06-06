@@ -1,19 +1,6 @@
-// Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-//
-// This file is part of Bytecoin.
-//
-// Bytecoin is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Bytecoin is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
+// Copyright (c) 2011-2017, The ManateeCoin Developers, The Cryptonote developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "Util.h"
 #include <cstdio>
@@ -23,9 +10,6 @@
 #include "CryptoNoteConfig.h"
 
 #ifdef WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
 #include <windows.h>
 #include <shlobj.h>
 #include <strsafe.h>
@@ -309,7 +293,7 @@ std::string get_nix_version_display_string()
     std::string config_folder;
 #ifdef WIN32
     // Windows
-    config_folder = get_special_folder_path(CSIDL_APPDATA, true) + "/" + CryptoNote::CRYPTONOTE_NAME;
+    config_folder = get_special_folder_path(CSIDL_APPDATA, true) + "\\" + CryptoNote::CRYPTONOTE_NAME;
 #else
     std::string pathRet;
     char* pszHome = getenv("HOME");
@@ -330,21 +314,34 @@ std::string get_nix_version_display_string()
     return config_folder;
   }
 
-  std::string getDefaultCacheFile(const std::string& dataDir) {
-    static const std::string name = "cache_file";
+#ifdef WIN32
+  std::wstring get_special_folder_path_w(int nfolder, bool iscreate)
+  {
+	  namespace fs = boost::filesystem;
+	  wchar_t wsz_path[MAX_PATH] = L"";
 
-    namespace bf = boost::filesystem;
-    bf::path dir = dataDir;
+	  if (SHGetSpecialFolderPathW(NULL, wsz_path, nfolder, iscreate)) {
+		  return wsz_path;
+	  }
 
-    if (!bf::exists(dir) ) {
-      throw std::runtime_error("Directory \"" + dir.string() + "\" doesn't exist");
-    }
+	  return L"";
+  }
+#endif
 
-    if (!bf::exists(dir/name)) {
-      throw std::runtime_error("File \"" + boost::filesystem::path(dir/name).string() + "\" doesn't exist");
-    }
+  std::wstring getDefaultDataDirectoryW()
+  {
+	  //namespace fs = boost::filesystem;
+	  // Windows < Vista: C:\Documents and Settings\Username\Application Data\CRYPTONOTE_NAME
+	  // Windows >= Vista: C:\Users\Username\AppData\Roaming\CRYPTONOTE_NAME
+	  // Mac: ~/Library/Application Support/CRYPTONOTE_NAME
+	  // Unix: ~/.CRYPTONOTE_NAME
+	  std::wstring config_folder;
+#ifdef WIN32
+	  // Windows
+	  config_folder = get_special_folder_path_w(CSIDL_APPDATA, true) + L"\\manateecoin";
+#endif
 
-    return boost::filesystem::path(dir/name).string();
+	  return config_folder;
   }
 
   bool create_directories_if_necessary(const std::string& path)

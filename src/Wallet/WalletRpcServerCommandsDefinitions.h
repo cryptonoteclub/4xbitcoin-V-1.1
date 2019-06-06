@@ -1,19 +1,6 @@
-// Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-//
-// This file is part of Bytecoin.
-//
-// Bytecoin is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Bytecoin is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
+// Copyright (c) 2011-2017, The ManateeCoin Developers, The Cryptonote developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #pragma once
 #include "CryptoNoteProtocol/CryptoNoteProtocolDefinitions.h"
@@ -32,6 +19,20 @@ using CryptoNote::ISerializer;
 #define WALLET_RPC_STATUS_OK      "OK"
 #define WALLET_RPC_STATUS_BUSY    "BUSY"
 
+struct COMMAND_RPC_GET_ADDRESS
+{
+	typedef CryptoNote::EMPTY_STRUCT request;
+
+	struct response
+	{
+		std::string address;
+
+		void serialize(ISerializer& s) {
+			KV_MEMBER(address)
+		}
+	};
+};
+
   struct COMMAND_RPC_GET_BALANCE
   {
     typedef CryptoNote::EMPTY_STRUCT request;
@@ -46,6 +47,22 @@ using CryptoNote::ISerializer;
         KV_MEMBER(available_balance)
       }
     };
+  };
+
+  struct COMMAND_RPC_GET_BALANCE_XMR
+  {
+	  typedef CryptoNote::EMPTY_STRUCT request;
+
+	  struct response
+	  {
+		  uint64_t balance;
+		  uint64_t unlocked_balance;
+
+		  void serialize(ISerializer& s) {
+			  KV_MEMBER(balance)
+		      KV_MEMBER(unlocked_balance)
+		  }
+	  };
   };
 
   struct transfer_destination
@@ -88,6 +105,105 @@ using CryptoNote::ISerializer;
     };
   };
 
+  struct COMMAND_RPC_TRANSFER_XMR
+  {
+	  struct request
+	  {
+		  std::list<transfer_destination> destinations;
+		  uint64_t fee = 1000000;
+		  uint64_t mixin = 0;
+		  uint64_t unlock_time;
+		  std::string payment_id;
+		  bool get_tx_key = false;
+		  uint64_t priority = 0;
+		  bool do_not_relay = false;
+		  bool get_tx_hex = false;
+
+		  void serialize(ISerializer& s) {
+			  KV_MEMBER(destinations)
+			  KV_MEMBER(fee)
+			  KV_MEMBER(mixin)
+			  KV_MEMBER(unlock_time)
+			  KV_MEMBER(payment_id)
+			  KV_MEMBER(get_tx_key)
+			  KV_MEMBER(priority)
+			  KV_MEMBER(do_not_relay)
+			  KV_MEMBER(get_tx_hex)
+		  }
+	  };
+
+	  struct response
+	  {
+		  uint64_t fee;
+		  std::string tx_hash;
+		  std::string tx_key;
+		  std::string tx_blob;
+
+		  void serialize(ISerializer& s) {
+			  KV_MEMBER(fee)
+			  KV_MEMBER(tx_hash)
+			  KV_MEMBER(tx_key)
+			  KV_MEMBER(tx_blob)
+		  }
+	  };
+  };
+
+  struct COMMAND_RPC_TRANSFER_SPLIT
+  {
+	  struct request
+	  {
+		  std::list<transfer_destination> destinations;
+		  uint32_t account_index;
+		  std::set<uint32_t> subaddr_indices;
+		  uint32_t priority;
+		  uint64_t mixin;
+		  uint64_t unlock_time;
+		  std::string payment_id;
+		  bool get_tx_keys;
+		  bool do_not_relay;
+		  bool get_tx_hex;
+
+		  void serialize(ISerializer& s) {
+			KV_MEMBER(destinations)
+			KV_MEMBER(account_index)
+			KV_MEMBER(subaddr_indices)
+			KV_MEMBER(priority)
+			KV_MEMBER(mixin)
+			KV_MEMBER(unlock_time)
+			KV_MEMBER(payment_id)
+			KV_MEMBER(get_tx_keys)
+			KV_MEMBER(do_not_relay)
+			KV_MEMBER(get_tx_hex)
+		  }
+	  };
+
+	  struct key_list
+	  {
+		  std::list<std::string> keys;
+
+		  void serialize(ISerializer& s) {
+			  KV_MEMBER(keys)
+		  }
+	  };
+
+	  struct response
+	  {
+		  std::list<std::string> tx_hash_list;
+		  std::list<std::string> tx_key_list;
+		  std::list<uint64_t> amount_list;
+		  std::list<uint64_t> fee_list;
+		  std::list<std::string> tx_blob_list;
+
+		  void serialize(ISerializer& s) {
+			KV_MEMBER(tx_hash_list)
+			KV_MEMBER(tx_key_list)
+			KV_MEMBER(amount_list)
+			KV_MEMBER(fee_list)
+			KV_MEMBER(tx_blob_list)
+		  }
+	  };
+  };
+
   struct COMMAND_RPC_STORE
   {
     typedef CryptoNote::EMPTY_STRUCT request;
@@ -109,6 +225,24 @@ using CryptoNote::ISerializer;
     }
   };
 
+  struct payment_details2
+  {
+	  std::string payment_id;
+	  std::string tx_hash;
+	  uint64_t amount;
+	  uint64_t block_height;
+	  uint64_t unlock_time;
+
+	  void serialize(ISerializer& s) {
+		  KV_MEMBER(payment_id)
+	      KV_MEMBER(tx_hash)
+		  KV_MEMBER(amount)
+		  KV_MEMBER(block_height)
+		  KV_MEMBER(unlock_time)
+	  }
+  };
+
+
   struct COMMAND_RPC_GET_PAYMENTS
   {
     struct request
@@ -129,6 +263,30 @@ using CryptoNote::ISerializer;
       }
     };
   };
+
+  struct COMMAND_RPC_GET_BULK_PAYMENTS
+  {
+	  struct request
+	  {
+		  std::vector<std::string> payment_ids;
+		  uint64_t min_block_height;
+
+		  void serialize(ISerializer& s) {
+			  KV_MEMBER(payment_ids)
+				  KV_MEMBER(min_block_height)
+		  }
+	  };
+
+	  struct response
+	  {
+		  std::list<payment_details2> payments;
+
+		  void serialize(ISerializer& s) {
+			  KV_MEMBER(payments)
+		  }
+	  };
+  };
+
 
   struct Transfer {
     uint64_t time;

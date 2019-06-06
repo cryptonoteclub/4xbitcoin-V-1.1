@@ -1,19 +1,6 @@
-// Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-//
-// This file is part of Bytecoin.
-//
-// Bytecoin is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Bytecoin is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
+// Copyright (c) 2011-2017, The ManateeCoin Developers, The Cryptonote developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "MiningConfig.h"
 
@@ -74,7 +61,6 @@ MiningConfig::MiningConfig(): help(false) {
       ("scan-time", po::value<size_t>()->default_value(DEFAULT_SCANT_PERIOD), "Blockchain polling interval (seconds). How often miner will check blockchain for updates")
       ("log-level", po::value<int>()->default_value(1), "Log level. Must be 0..5")
       ("limit", po::value<size_t>()->default_value(0), "Mine exact quantity of blocks. 0 means no limit")
-      ("cryptonight-variant", po::value<uint32_t>()->default_value(0), "CryptoNight variant. 0 for default. 1 for CryptoNightV7")
       ("first-block-timestamp", po::value<uint64_t>()->default_value(0), "Set timestamp to the first mined block. 0 means leave timestamp unchanged")
       ("block-timestamp-interval", po::value<int64_t>()->default_value(0), "Timestamp step for each subsequent block. May be set only if --first-block-timestamp has been set."
                                                          " If not set blocks' timestamps remain unchanged");
@@ -128,7 +114,6 @@ void MiningConfig::parse(int argc, char** argv) {
     throw std::runtime_error("If you specify --block-timestamp-interval you must specify --first-block-timestamp either");
   }
 
-  cryptonightVariant = options["cryptonight-variant"].as<uint32_t>();
   firstBlockTimestamp = options["first-block-timestamp"].as<uint64_t>();
   blockTimestampInterval = options["block-timestamp-interval"].as<int64_t>();
 }

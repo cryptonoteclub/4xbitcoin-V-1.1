@@ -1,25 +1,10 @@
-// Copyright (c) 2012-2017, The CryptoNote developers, The Bytecoin developers
-//
-// This file is part of Bytecoin.
-//
-// Bytecoin is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Bytecoin is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with Bytecoin.  If not, see <http://www.gnu.org/licenses/>.
+// Copyright (c) 2011-2017, The ManateeCoin Developers, The Cryptonote developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #pragma once
 
 namespace CryptoNote
 {
-  const static boost::uuids::uuid BYTECOIN_NETWORK = { {  0xb8, 0xd4, 0x3a, 0xfc, 0x4f, 0xcb, 0xd4, 0x3f, 0xcf, 0xf4, 0x67, 0xa5, 0xaf, 0x2c, 0x9c, 0x84  } };
-
+  const static boost::uuids::uuid CRYPTONOTE_NETWORK = { { 0x6d, 0x21, 0x8e, 0x22, 0x52, 0x62, 0x26, 0x14, 0x9f, 0x36, 0x5e, 0x1f, 0x2e, 0x34, 0x54, 0x35 } };
 }
-
