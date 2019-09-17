@@ -108,7 +108,9 @@ const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "";
 const char* const SEED_NODES[] = {
   "208.68.38.73:21697",
   "159.203.189.225:21697",
-  "134.209.113.231:21697"
+  "134.209.113.231:21697",
+  "213.136.89.252:21697",
+  "80.241.210.192:21697"
 };
 
 struct CheckpointData {
@@ -122,12 +124,13 @@ __attribute__((unused))
 
 // {<block height>, "<block hash>"}
 const std::initializer_list<CheckpointData> CHECKPOINTS = {
-  { 24552, "a5fced9c59f3f3192fc5460845aa5ef89de9e9704a98fb5c692e23e9315d5048" },
-  { 86863, "9f49f2cfe5b232b208b2b019070bb4c4b6efe4a95979be6188a2272b6a264cc9" },
-  { 87229, "83acd3eba879a378fc9763b6459fa43cbb10abc08b65d3a5b2b686b7144a3180" },
-  { 90846, "24097098a82e7c5ce24fae16fc86cb649dc7065d5d974f53bb2eba80c9d64091" },
-  { 369364, "300b744c08a93a2e51f58c9309517cfb894a8e20d6af61f98e10a04eca8257b3" }
+{    100, "a1dd2ca2b9a73584778cb4cd2ccdd1882195224669d3a6d82989cd0c85a66e30"},
+{   1000, "5616066294acaa8a766c18074f52883a2af521f73b4be40920733fd351fc22c1"},
+{   5000, "c565a56940fadb14dd91d8e09da30bc1792ae0e87ab8ae95cba414853104e5b1"},
+{  10000, "b33305a9dd9481528fef4bd11402f4afd81d9146c0fb9c768bab6e3f5ca00ff5"},
+{  15000, "d17b4e1aa7ca09c32361696e1eec5ef1e8ded06dadcb5b2b586786442bd475de"},
+{  20000, "60b8ed893c84577e5531ea592ce9f1d963a51f7dc7c7c0fbf1387958e9a21672"},
+{  24580, "937808aaa7ff3e5baba0fab7d08f15fcc65cc4881361e843782ee0c73cfd9551"}
 };
 }
-
 #define ALLOW_DEBUG_COMMANDS
